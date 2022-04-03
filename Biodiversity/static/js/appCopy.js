@@ -1,46 +1,52 @@
 function init() {
   var dropdownMenu = d3.select("#selDataset");
     d3.json("samples.json").then(data => {
-        console.log("read samples");
-        console.log(data);
 
+        // Fill out dropdown menu
         sampleID = data.names
-
+        //for each loop... for each i in the list found in data.names (aka sampleID), append the value (ex: 940), as text, to the bottom of the "options" in the dropdown list
         sampleID.forEach((i)=>{dropdownMenu.append("option").text(i).property("value")
-
         })
-        // verify all the data that is called later
-        console.log(data.metadata[0].age);
-        console.log(data.metadata[0].wfreq);
-        console.log(data.samples[0].sample_values);
-        console.log(data.samples[0].otu_ids);
-        console.log(data.samples[0].otu_labels);
 
         demographics(sampleID[0]);
-        bar(sampleID[0]);
+        charts(sampleID[0]);
 
     })};
+
 init();
+
 function demographics(userInput) {
     d3.json("samples.json").then(data => {
-        console.log("read samples");
-        console.log(data);
 
+        // The demographics info is in data.metadata
+        // meta is the list of all metadata dictionaries
         meta = data.metadata
-        chosen = meta.filter((record)=>record.id == userInput)
-        firstID = chosen[0]
-        var metaBox = d3.select("#sample-metadata")
-        Object.entries(firstID).forEach(([key, value])=>{metaBox.append("option").text(`${key}: ${value}`)
+
+        //filter... within meta (aka data.metadata) match record.ID (record is a single dictionary in the metadata list of dictionaries) to the userInput
+        //selected is a single selected record (dictionary)
+        selected = meta.filter((record)=>record.id == userInput);
+        
+        //firstID is
+        firstID = selected[0];
+        console.log(typeof firstID);
+
+        var metaBox = d3.select("#sample-metadata");
+        // metaBox.selectAll("*").remove();
+
+
+        //A json dictionary is a js object. Object.entries() "returns an array of a given object's own enumerable string-keyed property [key, value] pairs".
+        // select the div with id(#) "sample-metadata" (aka metaBox) and append the key: value pairs in the given text format
+        Object.entries(firstID).forEach(([key, value])=>{metaBox.append("option").text(`${key}: ${value}`);
     })
     })
 };
 
-function bar (userInput){
+function charts (userInput){
   d3.json("samples.json").then(data => {
 
     barSamples = data.samples;
-    chosen = barSamples.filter((record)=>record.id == userInput);
-    firstID = chosen[0];
+    selected = barSamples.filter((record)=>record.id == userInput);
+    firstID = selected[0];
 
     let testBar = [{
         type: "bar",
@@ -50,6 +56,13 @@ function bar (userInput){
         orientation: 'h'
     }];
     Plotly.newPlot("bar", testBar);
+
+
+
+
+
+
+
   }
   )};
         // // testBar should only display top 10, needs labels
@@ -111,16 +124,19 @@ function bar (userInput){
 
 
 
-// // Call updatePlotly() when a change takes place to the DOM
-// d3.selectAll("#selDataset").on("change", optionChanged);
+// Call updatePlotly() when a change takes place to the DOM
+d3.selectAll("#selDataset").on("change", optionChanged);
 
-// // This function is called when a dropdown menu item is selected
-// function optionChanged(value) {
-//     // Use D3 to select the dropdown menu
-//     var dropdownMenu = d3.select("#selDataset");
-//     // Assign the value of the dropdown menu option to a variable
-//     var dataset = dropdownMenu.property("value");
-    
+// This function is called when a dropdown menu item is selected
+function optionChanged(value) {
+    // Use D3 to select the dropdown menu
+    // var dropdownMenu = d3.select("#selDataset");
+    // Assign the value of the dropdown menu option to a variable
+    // var dataset = dropdownMenu.property("value");
+    demographics(value);
+    charts(value);
+
+};
 
 //     // PLACEHOLDER: Replace with real charts and data
 
