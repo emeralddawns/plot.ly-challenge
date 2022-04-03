@@ -3,32 +3,31 @@ function init() {
     d3.json("samples.json").then(data => {
 
         // Fill out dropdown menu
-        sampleID = data.names
+        sampleID = data.names;
         //for each loop... for each i in the list found in data.names (aka sampleID), append the value (ex: 940), as text, to the bottom of the "options" in the dropdown list
-        sampleID.forEach((i)=>{dropdownMenu.append("option").text(i).property("value")
+        sampleID.forEach((i)=>{dropdownMenu.append("option").text(i).property("value");
         })
 
         demographics(sampleID[0]);
         charts(sampleID[0]);
-
+        gauge(sampleID[0]);
     })};
-
-init();
 
 function demographics(userInput) {
     d3.json("samples.json").then(data => {
 
         // The demographics info is in data.metadata
         // meta is the list of all metadata dictionaries
-        meta = data.metadata
+        meta = data.metadata;
 
         //filter... within meta (aka data.metadata) match record.ID (record is a single dictionary in the metadata list of dictionaries) to the userInput
         //selected is a single selected record (dictionary)
         selected = meta.filter((record)=>record.id == userInput);
-        
+        console.log(selected);
+
         //firstID is
         firstID = selected[0];
-        console.log(typeof firstID);
+        console.log(firstID);
 
         var metaBox = d3.select("#sample-metadata");
         // metaBox.selectAll("*").remove();
@@ -44,10 +43,11 @@ function demographics(userInput) {
 function charts (userInput){
   d3.json("samples.json").then(data => {
 
-    barSamples = data.samples;
-    selected = barSamples.filter((record)=>record.id == userInput);
+    chartSamples = data.samples;
+    selected = chartSamples.filter((record)=>record.id == userInput);
     firstID = selected[0];
 
+    //testBar needs labels
     let testBar = [{
         type: "bar",
         x: firstID.sample_values.slice(0,10).reverse(),
@@ -57,72 +57,52 @@ function charts (userInput){
     }];
     Plotly.newPlot("bar", testBar);
 
+    //testBubble needs labels
+    let testBubble = [{
+        x: firstID.otu_ids,
+        y: firstID.sample_values,
+        text: firstID.otu_labels,            
+        mode: 'markers',
+        marker: {
+          color: firstID.otu_ids,
+          size: firstID.sample_values
+        }
+    }];
 
-
-
-
-
+        Plotly.newPlot("bubble", testBubble);
 
   }
-  )};
-        // // testBar should only display top 10, needs labels
-        // let testBar = [{
-        //     type: "bar",
-        //     x: data.samples[0].sample_values,
-        //     y: data.samples[0].otu_ids,
-        //     text: data.samples[0].otu_labels,
-        //     orientation: 'h'
-        // }];
+)};
         
-        //   Plotly.newPlot("bar", testBar);
+function gauge (userInput){
+  d3.json("samples.json").then(data => {
 
+    gaugeInfo = data.metadata;
+    selected = gaugeInfo.filter((record)=>record.id == userInput);
+    firstID = selected[0];
+    console.log(firstID)
+    
+    // testGauge
+    let testGauge = [{
+      domain: { x: [0, 1], y: [0, 1] },
+      value: firstID.wfreq,
+      title: { text: "Wash Frequency" },
+ 
+      type: "indicator",
+      mode: "gauge+number",
+      gauge: {
+        axis: { range: [null, 9] },
+        steps: [
+          { range: [0, 5], color: "lightgray" },
+          { range: [5, 9], color: "gray" }
+        ]}
 
+    }];
 
+    Plotly.newPlot("gauge", testGauge);
 
-
-
-        // // testGauge
-        // let testGauge = [{
-        //   domain: { x: [0, 1], y: [0, 1] },
-        //   value: data.metadata[0].wfreq,
-        //   title: { text: "Wash Frequency" },
-        //   type: "indicator",
-        //   mode: "gauge+number",
-        //   gauge: {
-        //     axis: { range: [null, 9] },
-        //     steps: [
-        //       { range: [0, 5], color: "lightgray" },
-        //       { range: [5, 9], color: "gray" }
-        //     ]}
-
-        // }];
-
-        // Plotly.newPlot("gauge", testGauge);
-
-        // //testBubble needs labels
-        // let testBubble = [{
-        //     x: data.samples[0].otu_ids,
-        //     y: data.samples[0].sample_values,
-        //     text: data.samples[0].otu_labels,            
-        //     mode: 'markers',
-        //     marker: {
-        //       color: data.samples[0].otu_ids,
-        //       size: data.samples[0].sample_values
-        //     }
-
-        // }];
-
-        //     Plotly.newPlot("bubble", testBubble);
-
-
-
-        //  landingTable = data.metadata   
-        //  Plotly.newPlot("sample-metadata", landingTable);
-    // });
-
-// }
-
-
+  })
+};
 
 // Call updatePlotly() when a change takes place to the DOM
 d3.selectAll("#selDataset").on("change", optionChanged);
@@ -135,28 +115,8 @@ function optionChanged(value) {
     // var dataset = dropdownMenu.property("value");
     demographics(value);
     charts(value);
+    gauge(value);
 
 };
 
-//     // PLACEHOLDER: Replace with real charts and data
-
-//     // Initialize x and y arrays
-//     var x = [];
-//     var y = [];
-
-//     if (dataset === '940') {
-//         x = [1, 2, 3, 4, 5];
-//         y = [1, 2, 4, 8, 16];
-//       }
-    
-//       else if (dataset === '941') {
-//         x = [10, 20, 30, 40, 50];
-//         y = [1, 10, 100, 1000, 10000];
-//       }
-
-//     // Note the extra brackets around 'x' and 'y'
-//     Plotly.restyle("bar", "x", [x]);
-//     Plotly.restyle("bar", "y", [y]);
-
-
-//     console.log(value);
+init();
