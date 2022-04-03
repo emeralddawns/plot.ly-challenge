@@ -3,7 +3,7 @@ function init() {
         console.log("read samples");
         console.log(data);
 
-        // try to read in all the data that is called later
+        // verify all the data that is called later
         console.log(data.metadata[0].age);
         console.log(data.metadata[0].wfreq);
         console.log(data.samples[0].sample_values);
@@ -23,11 +23,21 @@ function init() {
 
         // testGauge
         let testGauge = [{
-
+          domain: { x: [0, 1], y: [0, 1] },
+          value: data.metadata[0].wfreq,
+          title: { text: "Wash Frequency" },
+          type: "indicator",
+          mode: "gauge+number",
+          gauge: {
+            axis: { range: [null, 9] },
+            steps: [
+              { range: [0, 5], color: "lightgray" },
+              { range: [5, 9], color: "gray" }
+            ]}
 
         }];
 
-        Plotly.newPlot("gauge", data);
+        Plotly.newPlot("gauge", testGauge);
 
         //testBubble needs labels
         let testBubble = [{
