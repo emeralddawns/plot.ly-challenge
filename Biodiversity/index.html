@@ -19,17 +19,13 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-2">
-        <div class="well">
+      <div class="col-md-3">
+        <div class="well" style="min-width: 225px;">
           <h5>Test Subject ID No.:</h5>
-          <select id="selDataset" onchange="optionChanged(this.value)">
-            <!-- <option value="940">Subject: 940</option>
-            <option value="941">Subject: 941</option>                       -->
-          </select>
-            <div id="plot"></div>
+          <select id="selDataset" onchange="optionChanged(this.value)"></select>
 
         </div>
-        <div class="panel panel-primary">
+        <div class="panel panel-primary" style="min-width: 225px;">
           <div class="panel-heading">
             <h3 class="panel-title">Demographic Info</h3>
           </div>
@@ -46,8 +42,9 @@
       <div class="col-md-5">
         <div id="gauge"></div>
       </div>
-
     </div>
+
+
     <div class="row">
       <div class="col-md-12">
         <div id="bubble"></div>

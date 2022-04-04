@@ -23,15 +23,11 @@ function demographics(userInput) {
         //filter... within meta (aka data.metadata) match record.ID (record is a single dictionary in the metadata list of dictionaries) to the userInput
         //selected is a single selected record (dictionary)
         selected = meta.filter((record)=>record.id == userInput);
-        console.log(selected);
 
         //firstID is
         firstID = selected[0];
-        console.log(firstID);
 
         var metaBox = d3.select("#sample-metadata");
-        // metaBox.selectAll("*").remove();
-
 
         //A json dictionary is a js object. Object.entries() "returns an array of a given object's own enumerable string-keyed property [key, value] pairs".
         // select the div with id(#) "sample-metadata" (aka metaBox) and append the key: value pairs in the given text format
@@ -48,28 +44,44 @@ function charts (userInput){
     firstID = selected[0];
 
     //testBar needs labels
-    let testBar = [{
+    let barChart = [{
         type: "bar",
         x: firstID.sample_values.slice(0,10).reverse(),
         y: firstID.otu_ids.map(j=>`otu ${j}`).slice(0,10).reverse(),
         text: firstID.otu_labels.slice(0,10).reverse(),
         orientation: 'h'
     }];
-    Plotly.newPlot("bar", testBar);
+
+    let barLayout = {
+      title: { text: `Top 10 OTUs for Sample ${userInput}` }
+
+    };
+
+    Plotly.newPlot("bar", barChart, barLayout);
 
     //testBubble needs labels
-    let testBubble = [{
+    let bubbleChart = [{
         x: firstID.otu_ids,
         y: firstID.sample_values,
         text: firstID.otu_labels,            
         mode: 'markers',
         marker: {
           color: firstID.otu_ids,
+          colorscale: "Portland",
           size: firstID.sample_values
         }
+        
     }];
+    let bubbleLayout = {
+      title: { text: `OTU Amounts for Sample ${userInput}` },
 
-        Plotly.newPlot("bubble", testBubble);
+      xaxis: {
+        title: {
+          text: 'OTU ID'
+        }}
+    }
+
+        Plotly.newPlot("bubble", bubbleChart, bubbleLayout, {scrollZoom: true});
 
   }
 )};
@@ -82,11 +94,11 @@ function gauge (userInput){
     firstID = selected[0];
     console.log(firstID)
     
-    // testGauge
+    // testGauge needs a needle
     let testGauge = [{
       domain: { x: [0, 1], y: [0, 1] },
       value: firstID.wfreq,
-      title: { text: "Wash Frequency" },
+      title: { text: `Wash Frequency` },
  
       type: "indicator",
       mode: "gauge+number",
@@ -104,15 +116,13 @@ function gauge (userInput){
   })
 };
 
-// Call updatePlotly() when a change takes place to the DOM
-d3.selectAll("#selDataset").on("change", optionChanged);
-
 // This function is called when a dropdown menu item is selected
 function optionChanged(value) {
-    // Use D3 to select the dropdown menu
-    // var dropdownMenu = d3.select("#selDataset");
-    // Assign the value of the dropdown menu option to a variable
-    // var dataset = dropdownMenu.property("value");
+   
+    //empty the "Demographic Info" box
+    var metaBox = d3.select("#sample-metadata");
+    metaBox.selectAll("*").remove();
+
     demographics(value);
     charts(value);
     gauge(value);
