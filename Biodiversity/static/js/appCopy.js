@@ -95,6 +95,18 @@ function gauge (userInput){
     selected = gaugeInfo.filter((record)=>record.id == userInput);
     firstID = selected[0];
     
+    //colors from: https://hihayk.github.io/scale/#4/6/50/80/-51/67/20/14/1D9A6C/29/154/108/white
+    colors = [
+      "#137177",
+      "#188977",
+      "#1D9A6C",
+      "#39A96B",
+      "#56B870",
+      "#74C67A",
+      "#99D492",
+      "#BFE1B0",
+      "#DEEDCF"]
+
     // testGauge needs a needle, etc
     let testGauge = [{
       domain: { x: [0, 1], y: [0, 1] },
@@ -106,8 +118,15 @@ function gauge (userInput){
       gauge: {
         axis: { range: [null, 9] },
         steps: [
-          { range: [0, 5], color: "lightgray" },
-          { range: [5, 9], color: "gray" }
+          { range: [0, 1], color: colors[8] },
+          { range: [1, 2], color: colors[7] },
+          { range: [2, 3], color: colors[6] },
+          { range: [3, 4], color: colors[5] },
+          { range: [4, 5], color: colors[4] },
+          { range: [5, 6], color: colors[3] },
+          { range: [6, 7], color: colors[2] },
+          { range: [7, 8], color: colors[1] },
+          { range: [8, 9], color: colors[0] },
         ]}
 
     }];
