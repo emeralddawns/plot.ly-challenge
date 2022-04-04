@@ -21,10 +21,10 @@ function demographics(userInput) {
         meta = data.metadata;
 
         //filter... within meta (aka data.metadata) match record.ID (record is a single dictionary in the metadata list of dictionaries) to the userInput
-        //selected is a single selected record (dictionary)
+        //selected is a all records (dictionaries) that match the ID of the userInput, of which there should only be one
         selected = meta.filter((record)=>record.id == userInput);
 
-        //firstID is
+        //firstID is the first dictionary in the list of matching records, of which there should only have been one
         firstID = selected[0];
 
         var metaBox = d3.select("#sample-metadata");
@@ -43,7 +43,7 @@ function charts (userInput){
     selected = chartSamples.filter((record)=>record.id == userInput);
     firstID = selected[0];
 
-    //testBar needs labels
+    //barChart needs units
     let barChart = [{
         type: "bar",
         x: firstID.sample_values.slice(0,10).reverse(),
@@ -59,7 +59,7 @@ function charts (userInput){
 
     Plotly.newPlot("bar", barChart, barLayout);
 
-    //testBubble needs labels
+    //bubbleChart needs units
     let bubbleChart = [{
         x: firstID.otu_ids,
         y: firstID.sample_values,
@@ -73,6 +73,7 @@ function charts (userInput){
         
     }];
     let bubbleLayout = {
+      dragmode: "pan",
       title: { text: `OTU Amounts for Sample ${userInput}` },
 
       xaxis: {
@@ -80,8 +81,9 @@ function charts (userInput){
           text: 'OTU ID'
         }}
     }
+    let bubbleConfig = {responsive: true, scrollZoom: true};
 
-        Plotly.newPlot("bubble", bubbleChart, bubbleLayout, {scrollZoom: true});
+    Plotly.newPlot("bubble", bubbleChart, bubbleLayout, bubbleConfig);
 
   }
 )};
@@ -92,9 +94,8 @@ function gauge (userInput){
     gaugeInfo = data.metadata;
     selected = gaugeInfo.filter((record)=>record.id == userInput);
     firstID = selected[0];
-    console.log(firstID)
     
-    // testGauge needs a needle
+    // testGauge needs a needle, etc
     let testGauge = [{
       domain: { x: [0, 1], y: [0, 1] },
       value: firstID.wfreq,
