@@ -96,7 +96,7 @@ function gauge (userInput){
     firstID = selected[0];
     
     //colors from: https://hihayk.github.io/scale/#4/6/50/80/-51/67/20/14/1D9A6C/29/154/108/white
-    colors = [
+    let colors = [
       "#137177",
       "#188977",
       "#1D9A6C",
@@ -107,12 +107,13 @@ function gauge (userInput){
       "#BFE1B0",
       "#DEEDCF"]
 
+    let labels = ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9"]
+    
     // testGauge needs a needle, etc
     let testGauge = [{
       domain: { x: [0, 1], y: [0, 1] },
       value: firstID.wfreq,
       title: { text: `Wash Frequency` },
- 
       type: "indicator",
       mode: "gauge+number",
       gauge: {
