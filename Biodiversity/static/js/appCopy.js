@@ -54,10 +54,11 @@ function charts (userInput){
 
     let barLayout = {
       title: { text: `Top 10 OTUs for Sample ${userInput}` }
-
     };
 
-    Plotly.newPlot("bar", barChart, barLayout);
+    let barConfig = {responsive: true}
+
+    Plotly.newPlot("bar", barChart, barLayout, barConfig);
 
     //bubbleChart needs units
     let bubbleChart = [{
@@ -107,17 +108,19 @@ function gauge (userInput){
       "#BFE1B0",
       "#DEEDCF"]
 
-    let labels = ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9"]
+    let labels = ["0", "1", "2", "3", "4", "5", "6", "7", "8-9"]
     
     // testGauge needs a needle, etc
-    let testGauge = [{
+    let graphGauge = [{
       domain: { x: [0, 1], y: [0, 1] },
       value: firstID.wfreq,
-      title: { text: `Wash Frequency` },
+      title: { text: "<b>Wash Frequency</b><br><i>Scrubs per Week</i>" },
       type: "indicator",
       mode: "gauge+number",
       gauge: {
-        axis: { range: [null, 9] },
+        axis: { range: [null, 9],
+          tickmode: "linear",
+          ticks: "outside" },
         steps: [
           { range: [0, 1], color: colors[8] },
           { range: [1, 2], color: colors[7] },
@@ -128,11 +131,42 @@ function gauge (userInput){
           { range: [6, 7], color: colors[2] },
           { range: [7, 8], color: colors[1] },
           { range: [8, 9], color: colors[0] },
-        ]}
-
+        ]
+    }
     }];
+    //gaugeNeedle
+    
+    //calculate the wash frequency to angle conversion
+    let level = firstID.wfreq*20;
 
-    Plotly.newPlot("gauge", testGauge);
+    // Trig to calc meter point - from https://codepen.io/plotly/pen/rxeZME
+    let degrees = 180 - level,
+      radius = .5;
+    let radians = degrees * Math.PI / 180;
+    let x = radius * Math.cos(radians);
+    let y = radius * Math.sin(radians);
+
+    // Path: may have to change to create a better triangle
+    let mainPath = 'M -.0 -0.025 L .0 0.025 L ',
+      pathX = String(x),
+      space = ' ',
+      pathY = String(y),
+      pathEnd = ' Z';
+    let path = mainPath.concat(pathX,space,pathY,pathEnd);
+    
+    let gaugeLayout = {
+      shapes:[{
+          type: 'path',
+          path: path,
+          fillcolor: '850000',
+          line: {
+            color: '850000'
+          }
+        }]
+      };
+
+
+    Plotly.newPlot("gauge", graphGauge, gaugeLayout);
 
   })
 };
