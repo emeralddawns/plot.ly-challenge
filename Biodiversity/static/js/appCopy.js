@@ -107,16 +107,15 @@ function gauge (userInput){
       "#99D492",
       "#BFE1B0",
       "#DEEDCF"]
-
-    let labels = ["0", "1", "2", "3", "4", "5", "6", "7", "8-9"]
-    
+   
     // testGauge needs a needle, etc
-    let graphGauge = [{
+    let gaugeGraph = [{
       domain: { x: [0, 1], y: [0, 1] },
       value: firstID.wfreq,
       title: { text: "<b>Wash Frequency</b><br><i>Scrubs per Week</i>" },
       type: "indicator",
       mode: "gauge+number",
+      name: ["Test"],
       gauge: {
         axis: { range: [null, 9],
           tickmode: "linear",
@@ -131,42 +130,16 @@ function gauge (userInput){
           { range: [6, 7], color: colors[2] },
           { range: [7, 8], color: colors[1] },
           { range: [8, 9], color: colors[0] },
-        ]
-    }
+        ],
+        bar: {color: "#0A2F51"}
+      },
     }];
-    //gaugeNeedle
-    
-    //calculate the wash frequency to angle conversion
-    let level = firstID.wfreq*20;
+    let gaugeConfig = {
+      responsive: true,
+      autosize: true,
+      hovermode: "closest"};
 
-    // Trig to calc meter point - from https://codepen.io/plotly/pen/rxeZME
-    let degrees = 180 - level,
-      radius = .5;
-    let radians = degrees * Math.PI / 180;
-    let x = radius * Math.cos(radians);
-    let y = radius * Math.sin(radians);
-
-    // Path: may have to change to create a better triangle
-    let mainPath = 'M -.0 -0.025 L .0 0.025 L ',
-      pathX = String(x),
-      space = ' ',
-      pathY = String(y),
-      pathEnd = ' Z';
-    let path = mainPath.concat(pathX,space,pathY,pathEnd);
-    
-    let gaugeLayout = {
-      shapes:[{
-          type: 'path',
-          path: path,
-          fillcolor: '850000',
-          line: {
-            color: '850000'
-          }
-        }]
-      };
-
-
-    Plotly.newPlot("gauge", graphGauge, gaugeLayout);
+    Plotly.newPlot("gauge", gaugeGraph, gaugeConfig);
 
   })
 };
