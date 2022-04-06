@@ -4,19 +4,19 @@ This assignment consisted of using JavaScript, json, and html to build an intera
 # What the code does (in general terms)
 The code uses json information on Belly Button Biodiversity from [The Public Science Lab](http://robdunnlab.com/projects/belly-button-biodiversity/).
 
-# What the code collects
+# What the code displays
 
-The **mission_to_mars.ipynb** code uses Splinter, BeautifulSoup, and Pandas to collect the following:
+The **app.js** code uses d3, plot.ly, and **samples.json** to create 4  graphs and a drop-down list that allows users to choose between samples. The information is displayed in the following:
     
-    1. The title and teaser text of the latest news from https://redplanetscience.com/.
+    1. A demographic information list containing the id, ethnicity, gender, age, location, bbtype, and wash frequency for the contributor of each sample.
 
-    2. The featured image from https://spaceimages-mars.com.
+    2. A horizontal bar chart that displays the sample values of the top ten (10) operational taxonomic units (OTUs) found in the sample.
 
-    3. A table containing Mars facts from https://galaxyfacts-mars.com.
+    3. A gauge chart visually displaying the belly button wash frequency reported by the sample contributor.
 
-    4. The images and titles of the four (4) mars hemispheres from https://marshemispheres.com/.
+    4. A bubble chart that displays the sample values of all of the OTUs.
 
-The **app.py** and **scrape_mars.py** code uses MongoDB with Flask templating to collect the same information as above, and uses **index.html**, **style.css**, and Bootstrap 5 to create a webpage displaying the information.
+The **index.html**, **style.css**, and Bootstrap 3 are used to create the webpage displaying the graphs and information.
 
 A screenshot of the webpage can be seen below:
 ![Mars_Info_Scraper.png](Mars_Info_Scraper.png)
