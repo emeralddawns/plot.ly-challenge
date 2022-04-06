@@ -16,7 +16,7 @@ The **app.js** code uses d3, plot.ly, and **samples.json** to create 4 graphs, a
 
     4. A bubble chart that displays the sample values of all of the OTUs.
 
-**index.html**, **style.css**, and Bootstrap 3 are used to create the webpage displaying the graphs and information.
+**index.html**, and Bootstrap 3 are used to create the webpage displaying the graphs and information.
 
 # Notes on creating gauge charts using plot.ly type: "indicator" vs type: "pie"
 
