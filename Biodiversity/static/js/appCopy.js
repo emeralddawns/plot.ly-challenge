@@ -53,7 +53,10 @@ function charts (userInput){
     }];
 
     let barLayout = {
-      title: { text: `Top 10 OTUs for Sample ${userInput}` }
+      title: { text: `Top 10 OTUs for Sample ${userInput}` },
+      margin: {
+        t: 23,
+      }
     };
 
     let barConfig = {responsive: true}
@@ -95,7 +98,8 @@ function gauge (userInput){
     gaugeInfo = data.metadata;
     selected = gaugeInfo.filter((record)=>record.id == userInput);
     firstID = selected[0];
-    
+    console.log(firstID); 
+
     //colors from: https://hihayk.github.io/scale/#4/6/50/80/-51/67/20/14/1D9A6C/29/154/108/white
     let colors = [
       "#137177",
@@ -134,6 +138,7 @@ function gauge (userInput){
         bar: {color: "#0A2F51"}
       },
     }];
+
     let gaugeConfig = {
       responsive: true,
       autosize: true,
@@ -143,7 +148,6 @@ function gauge (userInput){
 
   })
 };
-
 // This function is called when a dropdown menu item is selected
 function optionChanged(value) {
    
